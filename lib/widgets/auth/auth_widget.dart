@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_db/widgets/main_screen_widget.dart/main_screen_widget.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({Key? key}) : super(key: key);
@@ -100,6 +101,25 @@ class _FormWidget extends StatefulWidget {
 
 class __FormWidgetState extends State<_FormWidget> {
   bool _hidePass = true;
+
+  final _formKey = GlobalKey<FormState>();
+
+  final _phoneOrEmail = TextEditingController();
+  final _password = TextEditingController();
+
+  void _auth() {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Proccessig Data, nearly")),
+      );
+    }
+    return null;
+  }
+
+  void _resetPasswor() {
+    print("It doesn't work, for now...");
+  }
+
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_declarations
@@ -116,30 +136,47 @@ class __FormWidgetState extends State<_FormWidget> {
     );
 
     final textFieldFocusedBorder = OutlineInputBorder(
-      borderSide:
-          BorderSide(color: Color.fromARGB(240, 63, 138, 224), width: 2),
+      borderSide: BorderSide(color: Color.fromARGB(240, 63, 138, 224)),
       borderRadius: BorderRadius.all(Radius.circular(9.0)),
     );
 
-    return Column(
-      children: [
-        TextField(
-          decoration: InputDecoration(
-            hintText: "Телефон или email",
-            hintStyle: TextStyle(
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _phoneOrEmail,
+            style: TextStyle(
                 color: widget.lightMode
                     ? Color.fromARGB(234, 25, 25, 26)
                     : Color.fromARGB(255, 214, 214, 214)),
-            enabledBorder: textFieldEnabledBorder,
-            contentPadding: EdgeInsets.all(12),
-            focusedBorder: textFieldFocusedBorder,
+            decoration: InputDecoration(
+              hintText: "Телефон или email",
+              hintStyle: TextStyle(
+                  color: widget.lightMode
+                      ? Color.fromARGB(234, 25, 25, 26)
+                      : Color.fromARGB(255, 214, 214, 214)),
+              enabledBorder: textFieldEnabledBorder,
+              contentPadding: EdgeInsets.all(12),
+              focusedBorder: textFieldFocusedBorder,
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           ),
-        ),
-        SizedBox(
-          height: 12,
-        ),
-        TextField(
+          SizedBox(
+            height: 12,
+          ),
+          TextFormField(
+            controller: _password,
             obscureText: _hidePass,
+            style: TextStyle(
+                color: widget.lightMode
+                    ? Color.fromARGB(234, 25, 25, 26)
+                    : Color.fromARGB(255, 214, 214, 214)),
             decoration: InputDecoration(
               hintText: "Пароль",
               hintStyle: TextStyle(
@@ -159,55 +196,67 @@ class __FormWidgetState extends State<_FormWidget> {
                 },
                 icon: Icon(_hidePass ? Icons.visibility : Icons.visibility_off),
               ),
-            )),
-        SizedBox(
-          height: 12,
-        ),
-        Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                "Вход",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: widget.lightMode
-                      ? Colors.white
-                      : Color.fromARGB(234, 25, 25, 26),
-                ),
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  widget.lightMode
-                      ? Color.fromARGB(240, 63, 138, 224)
-                      : Color.fromARGB(239, 225, 227, 230),
-                ),
-                minimumSize:
-                    MaterialStateProperty.all(Size(double.infinity, 43)),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(9.0))),
-              ),
             ),
-            SizedBox(
-              height: 5,
-            ),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                "Забыли пароль?",
-                style: TextStyle(
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+          SizedBox(
+            height: 12,
+          ),
+          Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.of(context).pushNamed('/main_screen');
+                  }
+                },
+                child: Text(
+                  "Вход",
+                  style: TextStyle(
                     fontSize: 16,
-                    color: Color.fromARGB(240, 63, 138, 224),
-                    fontWeight: FontWeight.w600),
-              ),
-              style: ButtonStyle(
+                    fontWeight: FontWeight.w600,
+                    color: widget.lightMode
+                        ? Colors.white
+                        : Color.fromARGB(234, 25, 25, 26),
+                  ),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    widget.lightMode
+                        ? Color.fromARGB(240, 63, 138, 224)
+                        : Color.fromARGB(239, 225, 227, 230),
+                  ),
                   minimumSize:
-                      MaterialStateProperty.all(Size(double.infinity, 43))),
-            )
-          ],
-        )
-      ],
+                      MaterialStateProperty.all(Size(double.infinity, 43)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(9.0))),
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  "Забыли пароль?",
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Color.fromARGB(240, 63, 138, 224),
+                      fontWeight: FontWeight.w600),
+                ),
+                style: ButtonStyle(
+                    minimumSize:
+                        MaterialStateProperty.all(Size(double.infinity, 43))),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }
@@ -261,62 +310,72 @@ class _ChooseLang extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 267, //??
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            TextButton(
-                onPressed: () {},
-                child: Text(
-                  "Українська",
-                  style: TextStyle(color: Color.fromARGB(255, 167, 166, 166)),
-                ),
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.all(0)),
-                )),
-            TextButton(
-                onPressed: () {},
-                child: Text(
-                  "English",
-                  style: TextStyle(color: Color.fromARGB(255, 167, 166, 166)),
-                ),
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.all(0)),
-                )),
-            TextButton(
-                onPressed: () {},
-                child: Text(
-                  "all languages »",
-                  style: TextStyle(color: Color.fromARGB(255, 167, 166, 166)),
-                ),
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.all(0)),
-                )),
-          ]),
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              "Версия для компьютера",
-              style: TextStyle(color: Color.fromARGB(255, 167, 166, 166)),
+      height: 270, //??
+      child: Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Українська",
+                    style: TextStyle(color: Color.fromARGB(255, 167, 166, 166)),
+                  ),
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.all(0)),
+                  )),
+              TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "English",
+                    style: TextStyle(color: Color.fromARGB(255, 167, 166, 166)),
+                  ),
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.all(0)),
+                  )),
+              TextButton(
+                  onPressed: () {},
+                  child: FittedBox(
+                    child: Text(
+                      "all languages »",
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 167, 166, 166)),
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.all(0)),
+                  )),
+            ]),
+            SizedBox(
+              height: 0,
             ),
-            style: ButtonStyle(
+            TextButton(
+              onPressed: () {},
+              child: FittedBox(
+                child: Text(
+                  "Версия для компьютера",
+                  style: TextStyle(color: Color.fromARGB(255, 167, 166, 166)),
+                ),
+              ),
+              style: ButtonStyle(
+                  padding: MaterialStateProperty.all(EdgeInsets.all(0)),
+                  minimumSize: MaterialStateProperty.all(Size(10, 0))),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                "Приложение для iOS",
+                style: TextStyle(color: Color.fromARGB(255, 167, 166, 166)),
+              ),
+              style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.all(0)),
-                minimumSize:
-                    MaterialStateProperty.all(Size(double.infinity, 13))),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              "Приложение для iOS",
-              style: TextStyle(color: Color.fromARGB(255, 167, 166, 166)),
+                minimumSize: MaterialStateProperty.all(Size(0, 10)),
+              ),
             ),
-            style: ButtonStyle(
-              padding: MaterialStateProperty.all(EdgeInsets.all(0)),
-              minimumSize: MaterialStateProperty.all(Size(0, 10)),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
